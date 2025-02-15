@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastfood-configmap
+data:
+  NODE_ENV: production
+  APP_PORT: "3000"
+  APP_HOST: "0.0.0.0"
+  hostname: fastfood-database.czxxd3lsra98.us-east-1.rds.amazonaws.com
+  port: "5432"
+  databasename: fastfood-46

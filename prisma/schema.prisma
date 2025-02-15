@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model products {
+  id          Int            @id @default(autoincrement())
+  name        String         @db.VarChar(255)
+  description String         @db.VarChar(255)
+  price       Float
+  createdAt   DateTime       @default(now()) @map("created_at")
+  categoryId  Int            @map("category_id")
+  category    categories?    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  orders      orderProduct[]
+}
+
+model categories {
+  id       Int        @id @default(autoincrement())
+  name     String     @db.VarChar(255)
+  products products[]
+}
+
+model users {
+  id    Int     @id @default(autoincrement())
+  name  String  @db.VarChar(255)
+  cpf   String  @unique @db.VarChar(255)
+  email String  @unique @db.VarChar(255)
+
+  orders orders[] @relation("UserOrders")
+}
+
+model orders {
+  id         Int         @id @default(autoincrement())
+  number     Int
+  status     orderStatus
+  receivedAt DateTime    @default(now()) @map("received_at")
+  updatedAt  DateTime    @default(now()) @map("updated_at")
+  userId     Int?        @map("user_id")
+
+  user     users?         @relation("UserOrders", fields: [userId], references: [id])
+  payment  payments?      @relation("OrderPayment")
+  products orderProduct[]
+}
+
+model orderProduct {
+  orderId   Int
+  productId Int
+  quantity  Int
+  order     orders   @relation(fields: [orderId], references: [id])
+  product   products @relation(fields: [productId], references: [id])
+
+  @@id([orderId, productId])
+  @@map("order_product")
+}
+
+model payments {
+  id         Int            @id @default(autoincrement())
+  orderId    Int            @unique @map("order_id")
+  value      Decimal
+  status     paymentsStatus
+  receivedAt DateTime       @default(now()) @map("received_at")
+  updatedAt  DateTime       @default(now()) @map("updated_at")
+
+  order orders @relation("OrderPayment", fields: [orderId], references: [id])
+}
+
+enum orderStatus {
+  PENDING
+  RECEIVED
+  PREPARATION
+  READY
+  DELIVERED
+  CANCELLED
+}
+
+enum paymentsStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
