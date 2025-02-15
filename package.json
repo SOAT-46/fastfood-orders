@@ -4,6 +4,7 @@
   "description": "fiap pos-tech",
   "main": "src/app.js",
   "author": "soat46",
+  "type": "module",
   "license": "MIT",
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
@@ -19,8 +20,9 @@
     "seed": "tsx prisma/seed.ts"
   },
   "devDependencies": {
-    "@testcontainers/postgresql": "^10.13.1",
-    "@types/jest": "^29.5.13",
+    "@jest/globals": "^29.7.0",
+    "@testcontainers/postgresql": "^10.18.0",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.0.0",
     "@types/supertest": "^6.0.2",
     "globals": "^15.9.0",
@@ -28,7 +30,7 @@
     "jest-mock-extended": "^3.0.7",
     "nodemon": "^3.1.4",
     "supertest": "^7.0.0",
-    "testcontainers": "^10.13.1",
+    "testcontainers": "^10.18.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "tsconfig-paths-jest": "^0.0.1",

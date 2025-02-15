@@ -1,6 +1,6 @@
 import {Prisma, PrismaClient} from '@prisma/client'
 
-const client = new PrismaClient()
+const client = new PrismaClient();
 
 const seed = async () => {
   const categoriesEntries = await client.categories.count();
